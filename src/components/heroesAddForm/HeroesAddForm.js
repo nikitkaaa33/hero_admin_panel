@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { heroesAdding } from "../heroesList/heroesSlice";
 import { v4 as uuidv4 } from 'uuid'
 import {useHttp} from '../../hooks/http.hook';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useCreateHeroMutation } from "../../api/apiSlice";
 
 
 const HeroesAddForm = () => {
@@ -13,24 +13,21 @@ const HeroesAddForm = () => {
     const [description, setDescription] = useState('');
     const [element, setElement] = useState('');
     const id = uuidv4();
-    const {request} = useHttp();
 
-    const dispatch = useDispatch();
+    const [createHero,] = useCreateHeroMutation();
 
     const handleSubmit = (e) => {
 
         e.preventDefault();
         const newHero = {id, name, description, element}
-        if(name && description) {
-            request(`http://localhost:3001/heroes/`, "POST")
-            .then(data => console.log(data, 'add'))
-            .then(dispatch(heroesAdding(newHero)))
-            .catch(err => console.log(err));
+        
+        createHero(newHero).unwrap();
+
         setName('');
         setDescription('');
         setElement('');
         }
-    }
+    
 
 
     return (

@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import heroes from '../components/heroesList/heroesSlice';
 import filters from '../components/heroesFilters/filterSlice';
+import { apiSlice } from '../api/apiSlice';
+
 
 const srtingMiddleware = () => (next) => (action) => {
     if(typeof action === 'string') {
@@ -12,8 +14,9 @@ const srtingMiddleware = () => (next) => (action) => {
 }
 
 const store = configureStore({
-    reducer: {heroes, filters},
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(srtingMiddleware),
+    reducer: {filters,
+            [apiSlice.reducerPath]: apiSlice.reducer},
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(srtingMiddleware, apiSlice.middleware),
     devTools: process.env.NODE_ENV !== 'production',
 })
 
