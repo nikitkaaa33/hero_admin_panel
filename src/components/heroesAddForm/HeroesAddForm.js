@@ -1,21 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { heroesAdding } from "../../actions";
+import { heroesAdding } from "../heroesList/heroesSlice";
 import { v4 as uuidv4 } from 'uuid'
 import {useHttp} from '../../hooks/http.hook';
 import * as Yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-
-// Задача для этого компонента:
-// Реализовать создание нового героя с введенными данными. Он должен попадать
-// в общее состояние и отображаться в списке + фильтроваться
-// Уникальный идентификатор персонажа можно сгенерировать через uiid
-// Усложненная задача:
-// Персонаж создается и в файле json при помощи метода POST
-// Дополнительно:
-// Элементы <option></option> желательно сформировать на базе
-// данных из фильтров
 
 const HeroesAddForm = () => {
 
@@ -26,15 +16,6 @@ const HeroesAddForm = () => {
     const {request} = useHttp();
 
     const dispatch = useDispatch();
-
-    const heroSchema = Yup.object({
-        name: Yup.string()
-            .min(2, 'Минимум 2 символа для заполнения')
-            .required('Обязательное поле!'),
-        description: Yup.string()
-            .min(2, 'Минимум 2 символа для заполнения')
-            .required('Обязательное поле!'),
-    })
 
     const handleSubmit = (e) => {
 
